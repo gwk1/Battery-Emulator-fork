@@ -121,6 +121,19 @@ typedef struct {
 } DATALAYER_INFO_BMWPHEV;
 
 typedef struct {
+  int16_t balance_target_mV = 4220;
+  /** Balancing active **/
+  boolean balancing_active = 0;
+  boolean balancing_allowed = 0;
+  /** Cell balancing status, 16 cells per module, up to 12 modules **/
+  int16_t balance_status[12];
+  /** CMU errors bits, up to 12 modules **/
+  int32_t error[12];
+  uint8_t configuredStartingModuleID = 1;
+  boolean csc_id_reset_allowed=false;
+} DATALAYER_INFO_BMWPHEVCSC;
+
+typedef struct {
   /** uint16_t */
   /** SOC% raw battery value. Might not always reach 100% */
   uint16_t SOC_raw = 0;
@@ -724,6 +737,7 @@ class DataLayerExtended {
   DATALAYER_INFO_BOLTAMPERA boltampera;
   DATALAYER_INFO_BMWIX bmwix;
   DATALAYER_INFO_BMWPHEV bmwphev;
+  DATALAYER_INFO_BMWPHEVCSC bmwphevcsc;
   DATALAYER_INFO_BMWI3 bmwi3;
   DATALAYER_INFO_BYDATTO3 bydAtto3;
   DATALAYER_INFO_CELLPOWER cellpower;

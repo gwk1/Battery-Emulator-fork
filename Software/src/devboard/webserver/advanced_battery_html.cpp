@@ -213,6 +213,31 @@ String advanced_battery_processor(const String& var) {
     content += "<br>";
 #endif  //BMW_PHEV_BATTERY
 
+
+#ifdef BMW_PHEV_CSC_BATTERY
+    content += "<h4>Balancing setPoint: " + String(datalayer_extended.bmwphevcsc.balance_target_mV) + " mV</h4>" +
+               "<h4>Balancing active: " + String(datalayer_extended.bmwphevcsc.balancing_active) + "</h4>" +
+               "<h4>Balancing status: " + String(datalayer_extended.bmwphevcsc.balance_status[0], BIN) + "</h4>" +
+               "<h4>Balancing status: " + String(datalayer_extended.bmwphevcsc.balance_status[1], BIN) + "</h4>" +
+               "<h4>Balancing status: " + String(datalayer_extended.bmwphevcsc.balance_status[2], BIN) + "</h4>" +
+               "<h4>Balancing status: " + String(datalayer_extended.bmwphevcsc.balance_status[3], BIN) + "</h4>" +
+               "<h4>Balancing status: " + String(datalayer_extended.bmwphevcsc.balance_status[4], BIN) + "</h4>" +
+               "<h4>Balancing status: " + String(datalayer_extended.bmwphevcsc.balance_status[5], BIN) + "</h4>" +
+               "<h4>Balancing status: " + String(datalayer_extended.bmwphevcsc.balance_status[6], BIN) + "</h4>" +
+               "<h4>Balancing status: " + String(datalayer_extended.bmwphevcsc.balance_status[7], BIN) + "</h4>" +
+               "<h4>Balancing status: " + String(datalayer_extended.bmwphevcsc.balance_status[8], BIN) + "</h4>" +
+               "<h4>Balancing status: " + String(datalayer_extended.bmwphevcsc.balance_status[9], BIN) + "</h4>" +
+               "<h4>Balancing status: " + String(datalayer_extended.bmwphevcsc.balance_status[10], BIN) + "</h4>" +
+               "<h4>Balancing status: " + String(datalayer_extended.bmwphevcsc.balance_status[11], BIN) + "</h4>" +
+               "<h4>FirstID: " + String(datalayer_extended.bmwphevcsc.configuredStartingModuleID) + "</h4>" +
+               "<h4>resetallowd: " + String(datalayer_extended.bmwphevcsc.csc_id_reset_allowed) + "</h4>" ;
+
+
+               content += "<button onclick='ReprogramCscId()'>Reprogram CSC id's</button>";
+
+#endif  //BMW_PHEV_CSC_BATTERY
+
+
 #ifdef BMW_I3_BATTERY
     content += "<h4>SOC raw: " + String(datalayer_extended.bmwi3.SOC_raw) + "</h4>";
     content += "<h4>SOC dash: " + String(datalayer_extended.bmwi3.SOC_dash) + "</h4>";
@@ -1411,7 +1436,7 @@ String advanced_battery_processor(const String& var) {
     content += "<button onclick='Volvo_BECMecuReset()'>Restart BECM module</button>";
 #endif  // VOLVO_SPA_HYBRID_BATTERY
 
-#if !defined(BMW_PHEV_BATTERY) && !defined(BMW_IX_BATTERY) && !defined(BOLT_AMPERA_BATTERY) &&       \
+#if !defined(BMW_PHEV_BATTERY) &&!defined(BMW_PHEV_CSC_BATTERY) &&  !defined(BMW_IX_BATTERY) && !defined(BOLT_AMPERA_BATTERY) &&       \
     !defined(TESLA_BATTERY) && !defined(NISSAN_LEAF_BATTERY) && !defined(BMW_I3_BATTERY) &&          \
     !defined(BYD_ATTO_3_BATTERY) && !defined(RENAULT_ZOE_GEN2_BATTERY) && !defined(CELLPOWER_BMS) && \
     !defined(MEB_BATTERY) && !defined(VOLVO_SPA_BATTERY) && !defined(VOLVO_SPA_HYBRID_BATTERY) &&    \
@@ -1480,6 +1505,25 @@ String advanced_battery_processor(const String& var) {
     // Additial functions added
     content += "<script>";
     content += "function exportLog() { window.location.href = '/export_log'; }";
+    content += "</script>";
+
+    content += "<script>"; 
+    content += "function editComplete(){if(this.status==200){window.location.reload();}}";
+    content += "function editError(){alert('Invalid input');}";
+
+    content +=
+        "function ReprogramCscId(){"
+        "  var value=prompt('ID of all connected csc modules will be reprogrammed startig from id entered (0-14):');"
+        "  if(value!==null){"
+        "     if(value>=0&&value<=14){"
+        "        var xhr=new XMLHttpRequest();xhr.onload=editComplete;xhr.onerror=editError;"
+        "        xhr.open('GET','/ReprogramCscId?value='+value,true);"
+        "        xhr.send();"
+        "     }else{"
+        "       alert('Invalid value. Please enter a value between 0 and 14');"
+        "     }"
+        "  }"
+        "}";
     content += "</script>";
 
     return content;

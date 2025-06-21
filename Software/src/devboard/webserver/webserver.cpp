@@ -832,6 +832,23 @@ void init_webserver() {
     ESP.restart();
   });
 
+
+  // Define the handler to start reprogramming CSC module id's
+  server.on("/ReprogramCscId", HTTP_GET, [](AsyncWebServerRequest* request) {
+    if (WEBSERVER_AUTH_REQUIRED && !request->authenticate(http_username, http_password))
+      return request->requestAuthentication();
+    if (request->hasParam("value")) {
+      String value = request->getParam("value")->value();
+      datalayer_extended.bmwphevcsc.configuredStartingModuleID = value.toInt();
+      datalayer_extended.bmwphevcsc.csc_id_reset_allowed = true;
+      request->send(200, "text/plain", "CSC reprogram cycle initiated");
+    } else {
+      request->send(400, "text/plain", "Bad Request");
+    }
+  });
+
+
+
   // Initialize ElegantOTA
   init_ElegantOTA();
 
