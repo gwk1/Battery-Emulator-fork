@@ -5,7 +5,7 @@
 #include "../datalayer/datalayer_extended.h"
 #include "src/devboard/webserver/BatteryHtmlRenderer.h"
 
-class BmwPhevCscRenderer : public BatteryHtmlRenderer {
+class BmwPhevCscHtmlRenderer : public BatteryHtmlRenderer {
  public:
   String get_status_html() {
     String content;
@@ -27,7 +27,22 @@ class BmwPhevCscRenderer : public BatteryHtmlRenderer {
                "<h4>FirstID: " + String(datalayer_extended.bmwphevcsc.configuredStartingModuleID) + "</h4>" +
                "<h4>resetallowd: " + String(datalayer_extended.bmwphevcsc.csc_id_reset_allowed) + "</h4>";
 
-    content += "<button onclick='ReprogramCscId()'>Reprogram CSC id's</button>";
+    content += "<button onclick='ReprogramCscIdQueryValue()'>Reprogram CSC id's</button>";
+    content += "<script>";
+    content +=
+        "function ReprogramCscIdQueryValue(){"
+        "  var value=prompt('ID of all connected csc modules will be reprogrammed startig from id entered (0-14):');"
+        "  if(value!==null){"
+        "     if(value>=0&&value<=14){"
+        "        var xhr=new XMLHttpRequest();"
+        "        xhr.open('GET','/ReprogramCscId?value='+value,true);"
+        "        xhr.send();"
+        "     }else{"
+        "       alert('Invalid value. Please enter a value between 0 and 14');"
+        "     }"
+        "  }"
+        "}";
+    content += "</script>";
 
     return content;
   }

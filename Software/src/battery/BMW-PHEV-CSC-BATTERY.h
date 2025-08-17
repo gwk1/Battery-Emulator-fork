@@ -23,7 +23,10 @@ class BmwPhevCscBattery : public CanBattery {
   virtual void ResetCSCid();
   static constexpr const char* Name = "BMW PHEV CSC invidual module battery";
 
+  BatteryHtmlRenderer& get_status_renderer() { return renderer; }
+
  private:
+  BmwPhevCscHtmlRenderer renderer;
   uint8_t mescycle = 0;
   uint8_t testcycle = 0;
   uint8_t CSC_addr[8] = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -46,12 +49,10 @@ class BmwPhevCscBattery : public CanBattery {
   /** MODULES * STRINGS =< 14**/
   static const int MODULES_PER_STRING = 1;
   static const int PARALLEL_STRINGS = 1;
-  static const int MAX_DISCHARGE_POWER=5000;
-  static const int MAX_CHARGE_POWER=5000;
+  static const int MAX_DISCHARGE_POWER = 5000;
+  static const int MAX_CHARGE_POWER = 5000;
 
-  static const int MAX_CELL_DEVIATION_MV=9999;
-
-
+  static const int MAX_CELL_DEVIATION_MV = 9999;
 
   uint16_t battery_cell_voltages_mV[CELLS_PER_MODULE * MODULES_PER_STRING * PARALLEL_STRINGS];
   bool battery_cell_voltages_valid[CELLS_PER_MODULE * MODULES_PER_STRING * PARALLEL_STRINGS];

@@ -1,9 +1,9 @@
-#ifdef BMW_PHEV_CSC_BATTERY
+#include "BMW-PHEV-CSC-BATTERY.h"
+#include "../communication/can/comm_can.h"
 #include "../datalayer/datalayer.h"
 #include "../datalayer/datalayer_extended.h"
 #include "../devboard/utils/events.h"
-#include "../communication/can/comm_can.h"
-#include "BMW-PHEV-CSC-BATTERY.h"
+#include "../devboard/utils/logging.h"
 #include "CRC8.h"
 
 /* Do not change code below unless you are sure what you are doing */
@@ -304,7 +304,7 @@ void BmwPhevCscBattery::findUnassigned() {
   TxFrame.data.u8[6] = 0xFF;
   TxFrame.data.u8[7] = 0xFF;
 
-  transmit_can_frame(&TxFrame, can_config.battery);
+  transmit_can_frame(&TxFrame);
   //  Can0.write(msg);
 }
 
@@ -324,7 +324,7 @@ void BmwPhevCscBattery::assignID() {
   TxFrame.data.u8[6] = 0xFF;
   TxFrame.data.u8[7] = 0xFF;
 
-  transmit_can_frame(&TxFrame, can_config.battery);
+  transmit_can_frame(&TxFrame);
 
   delay(30);
 
@@ -334,17 +334,17 @@ void BmwPhevCscBattery::assignID() {
   TxFrame.data.u8[4] = CSC_addr[6];
   TxFrame.data.u8[5] = CSC_addr[7];
 
-  transmit_can_frame(&TxFrame, can_config.battery);
+  transmit_can_frame(&TxFrame);
 
   delay(10);
   TxFrame.data.u8[0] = 0x5B;
   TxFrame.data.u8[1] = datalayer_extended.bmwphevcsc.configuredStartingModuleID;
-  transmit_can_frame(&TxFrame, can_config.battery);
+  transmit_can_frame(&TxFrame);
 
   delay(10);
   TxFrame.data.u8[0] = 0x37;
   TxFrame.data.u8[1] = datalayer_extended.bmwphevcsc.configuredStartingModuleID;
-  transmit_can_frame(&TxFrame, can_config.battery);
+  transmit_can_frame(&TxFrame);
 
   datalayer_extended.bmwphevcsc.configuredStartingModuleID++;
 
@@ -365,7 +365,7 @@ void BmwPhevCscBattery::ResetCSCid() {
     TxFrame.data.u8[5] = 0xFF;
     TxFrame.data.u8[6] = 0xFF;
     TxFrame.data.u8[7] = 0xFF;
-    transmit_can_frame(&TxFrame, can_config.battery);
+    transmit_can_frame(&TxFrame);
     //    delay(2);
   }
 
@@ -379,7 +379,7 @@ void BmwPhevCscBattery::ResetCSCid() {
   TxFrame.data.u8[6] = 0xFF;
   TxFrame.data.u8[7] = 0xFF;
 
-  transmit_can_frame(&TxFrame, can_config.battery);
+  transmit_can_frame(&TxFrame);
 }
 
 uint8_t Calculate_frame_crc(CAN_frame& msg, int id) {
@@ -453,7 +453,7 @@ void BmwPhevCscBattery::transmit_can(unsigned long currentMillis) {
       }
 
       TxFrame.data.u8[7] = Calculate_frame_crc(TxFrame, nextmes);
-      transmit_can_frame(&TxFrame, can_config.battery);
+      transmit_can_frame(&TxFrame);
     }
     mescycle++;
     if (testcycle < 4) {
@@ -481,5 +481,3 @@ void BmwPhevCscBattery::setup(void) {  // Performs one time setup at startup
   datalayer.battery.info.min_design_voltage_dV =
       CELLS_PER_MODULE * MODULES_PER_STRING * 3800;  // under this, discharging further is disabled
 }
-
-#endif
