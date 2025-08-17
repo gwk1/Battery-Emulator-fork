@@ -95,6 +95,19 @@ struct DATALAYER_INFO_BMWPHEV {
   int32_t iso_safety_kohm_quality = 0;  //STAT_R_ISO_ROH_QAL_01_INFO Quality of measurement 0-21 (higher better)
 };
 
+typedef struct {
+  int16_t balance_target_mV = 4220;
+  /** Balancing active **/
+  boolean balancing_active = 0;
+  boolean balancing_allowed = 0;
+  /** Cell balancing status, 16 cells per module, up to 12 modules **/
+  int16_t balance_status[12];
+  /** CMU errors bits, up to 12 modules **/
+  int32_t error[12];
+  uint8_t configuredStartingModuleID = 1;
+  boolean csc_id_reset_allowed = false;
+} DATALAYER_INFO_BMWPHEVCSC;
+
 struct DATALAYER_INFO_BYDATTO3 {
   /** bool */
   /** User requesting crash reset via WebUI*/
@@ -879,6 +892,7 @@ class DataLayerExtended {
  public:
   DATALAYER_INFO_BOLTAMPERA boltampera;
   DATALAYER_INFO_BMWPHEV bmwphev;
+  DATALAYER_INFO_BMWPHEVCSC bmwphevcsc;
   DATALAYER_INFO_BYDATTO3 bydAtto3;
   DATALAYER_INFO_CELLPOWER cellpower;
   DATALAYER_INFO_CHADEMO chademo;

@@ -15,6 +15,7 @@ void setup_can_shunt();
 #include "BMW-I3-BATTERY.h"
 #include "BMW-IX-BATTERY.h"
 #include "BMW-PHEV-BATTERY.h"
+#include "BMW-PHEV-CSC-BATTERY.h"
 #include "BMW-SBOX.h"
 #include "BOLT-AMPERA-BATTERY.h"
 #include "BYD-ATTO-3-BATTERY.h"

@@ -12,7 +12,7 @@
 /* Select battery used */
 //#define BMW_I3_BATTERY
 //#define BMW_IX_BATTERY
-//#define BMW_PHEV_BATTERY
+#define BMW_PHEV_CSC_BATTERY
 //#define BOLT_AMPERA_BATTERY
 //#define BYD_ATTO_3_BATTERY
 //#define FOXESS_BATTERY
@@ -75,7 +75,7 @@
 //#define SUNGROW_CAN      //Enable this line to emulate a "Sungrow SBR064" over CAN bus
 
 /* Select hardware used for Battery-Emulator */
-//#define HW_LILYGO
+#define HW_LILYGO
 //#define HW_STARK
 //#define HW_3LB
 //#define HW_DEVKIT
